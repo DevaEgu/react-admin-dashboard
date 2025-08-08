@@ -15,8 +15,8 @@ const UstazTable = () => {
         
         // Filter for isUstaz: true and transform data
         const transformedData = response.data
-          .filter(user => user.isUstaz)
-          .map(ustaz => ({
+          .filter((user:any) => user.isUstaz)
+          .map((ustaz:any) => ({
             id: ustaz._id,
             name: ustaz.fullName,
             experience: ustaz.experience || '0', // Use experience from API or default to 0
@@ -27,7 +27,7 @@ const UstazTable = () => {
 
         setUstazData(transformedData);
         setLoading(false);
-      } catch (err) {
+      } catch (err:any) {
         setError(err.response?.data?.message || err.message);
         setLoading(false);
       }
@@ -36,7 +36,7 @@ const UstazTable = () => {
     fetchUstaz();
   }, []);
 
-  const filteredUstaz = ustazData.filter(ustaz =>
+  const filteredUstaz = ustazData.filter((ustaz:any) =>
     ustaz.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     ustaz.experience?.toString().includes(searchTerm)
   );
@@ -57,7 +57,7 @@ const UstazTable = () => {
         <div className="flex gap-2">
           <select className="border px-2 py-1 rounded">
             <option>Experience</option>
-            {[...new Set(ustazData.map(u => u.experience))].map(exp => (
+            {[...new Set(ustazData.map((u:any) => u.experience))].map(exp => (
               <option key={exp} value={exp}>{exp} years</option>
             ))}
           </select>
@@ -88,7 +88,7 @@ const UstazTable = () => {
         </thead>
         <tbody>
           {filteredUstaz.length > 0 ? (
-            filteredUstaz.map((ustaz) => (
+            filteredUstaz.map((ustaz:any) => (
               <tr key={ustaz.id} className="border-t">
                 <td className="p-2">{ustaz.id}</td>
                 <td className="p-2 flex items-center gap-2">
@@ -120,7 +120,7 @@ const UstazTable = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="p-4 text-center">No ustaz found</td>
+              <td colSpan={6} className="p-4 text-center">No ustaz found</td>
             </tr>
           )}
         </tbody>

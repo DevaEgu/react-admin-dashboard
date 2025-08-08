@@ -13,8 +13,8 @@ const RequestTable = () => {
       try {
         const response = await axios.get('http://localhost:3000/api/user');
         const transformedData = response.data
-          .filter(user => user.isUstaz)
-          .map(ustaz => ({
+          .filter((user:any) => user.isUstaz)
+          .map((ustaz:any) => ({
             id: ustaz._id,
             name: ustaz.fullName,
             courseEnrolled: ustaz.specialization || 'Not specified',
@@ -24,7 +24,7 @@ const RequestTable = () => {
           }));
         setUstazData(transformedData);
         setLoading(false);
-      } catch (err) {
+      } catch (err:any) {
         setError(err.response?.data?.message || err.message);
         setLoading(false);
       }
@@ -33,7 +33,7 @@ const RequestTable = () => {
     fetchUstaz();
   }, []);
 
-  const filteredUstaz = ustazData.filter(ustaz =>
+  const filteredUstaz = ustazData.filter((ustaz:any) =>
     ustaz.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     ustaz.courseEnrolled?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -45,7 +45,7 @@ const RequestTable = () => {
     <div className="bg-white p-6 rounded shadow">
       {/* ... (keep existing JSX structure) ... */}
       <tbody>
-        {filteredUstaz.map((ustaz) => (
+        {filteredUstaz.map((ustaz:any) => (
           <tr key={ustaz.id} className="border-t">
             <td className="p-2">{ustaz.id}</td>
             <td className="p-2 flex items-center gap-2">

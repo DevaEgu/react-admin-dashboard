@@ -1,45 +1,33 @@
 import React, { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Adjust path as needed
+import useAuthStore from '../store/authStore'; // Import the Zustand store
 
 const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth(); // Assuming you have an auth context
+  const { login, googleLogin, isLoading, error } = useAuthStore();
 
-  const handleSubmit = async (e) => {
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+
+  const handleChange = (e:any) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      await login(email, password);
-      navigate('/dashboard'); // Redirect to dashboard after successful login
-    } catch (err) {
-      setError('Invalid email or password. Please try again.');
-      console.error('Login error:', err);
-    } finally {
-      setLoading(false);
+    console.log("Credentials: ", credentials)
+    const success = await login(credentials);
+    if (success) {
+      navigate('/dashboard'); 
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      setLoading(true);
-      // Implement your Google auth logic here
-      console.log('Google auth response:', credentialResponse);
-      // await handleGoogleAuth(credentialResponse.credential);
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Google authentication failed. Please try again.');
-      console.error('Google auth error:', err);
-    } finally {
-      setLoading(false);
+  const handleGoogleSuccess = async (credentialResponse:any) => {
+    const success = await googleLogin(credentialResponse.credential);
+    if (success) {
+      navigate('/courses'); 
     }
+  
   };
 
   return (
@@ -54,7 +42,7 @@ const SignIn = () => {
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => {
-              setError('Google authentication failed. Please try again.');
+              console.error('Google authentication failed. Please try again.');
             }}
             useOneTap
             theme="outline"
@@ -96,8 +84,8 @@ const SignIn = () => {
                 type="email"
                 autoComplete="email"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={credentials.email}
+                onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your email"
               />
@@ -113,8 +101,8 @@ const SignIn = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={credentials.password}
+                onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your password"
               />
@@ -144,12 +132,12 @@ const SignIn = () => {
           <div>
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoading}
               className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                loading ? 'opacity-75 cursor-not-allowed' : ''
+                isLoading ? 'opacity-75 cursor-not-allowed' : ''
               }`}
             >
-              {loading ? (
+              {isLoading ? (
                 <>
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

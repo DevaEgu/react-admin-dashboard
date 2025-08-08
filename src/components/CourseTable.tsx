@@ -12,7 +12,7 @@ const CourseTable = () => {
   const fetchCourses = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/courses');
-      const transformedData = response.data.map(course => ({
+      const transformedData = response.data.map((course:any) => ({
         _id: course._id,
         name: course.courseName,
         instructor: course.fullName,
@@ -23,7 +23,7 @@ const CourseTable = () => {
       }));
       setCourses(transformedData);
       setLoading(false);
-    } catch (err) {
+    } catch (err:any) {
       setError(err.response?.data?.message || err.message);
       setLoading(false);
     }
@@ -32,7 +32,7 @@ const CourseTable = () => {
   fetchCourses();
 }, []);
 
-  const filteredCourses = courses.filter(course =>
+  const filteredCourses = courses.filter((course:any) =>
     course.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.instructor?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.type?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -55,14 +55,14 @@ const CourseTable = () => {
           <select className="border px-2 py-1 rounded">
             <option>Instructor</option>
             {/* You can populate this dynamically from courses data */}
-            {[...new Set(courses.map(course => course.instructor))].map(instructor => (
+            {[...new Set(courses.map((course:any) => course.instructor))].map(instructor => (
               <option key={instructor} value={instructor}>{instructor}</option>
             ))}
           </select>
           <select className="border px-2 py-1 rounded">
             <option>Course Type</option>
             {/* Dynamic course types */}
-            {[...new Set(courses.map(course => course.type))].map(type => (
+            {[...new Set(courses.map((course:any) => course.type))].map(type => (
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
@@ -89,7 +89,7 @@ const CourseTable = () => {
         </thead>
         <tbody>
           {filteredCourses.length > 0 ? (
-            filteredCourses.map((course) => (
+            filteredCourses.map((course:any) => (
               <tr key={course._id} className="border-t">
                 <td className="p-2">{course._id || course.id}</td>
                 <td className="p-2">{course.name}</td>
@@ -118,7 +118,7 @@ const CourseTable = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="p-4 text-center">No courses found</td>
+                <td colSpan={7} className="p-4 text-center">No courses found</td>
             </tr>
           )}
         </tbody>

@@ -13,8 +13,8 @@ const AttendanceTable = () => {
       try {
         const response = await axios.get('http://localhost:3000/api/user');
         const studentData = response.data
-          .filter(user => !user.isUstaz)
-          .map(student => ({
+          .filter((user:any )=> !user.isUstaz)
+          .map((student:any) => ({
             id: student._id,
             name: student.fullName,
             course: student.specialization || 'Not enrolled',
@@ -24,7 +24,7 @@ const AttendanceTable = () => {
           }));
         setStudents(studentData);
         setLoading(false);
-      } catch (err) {
+      } catch (err:any) {
         setError(err.response?.data?.message || err.message);
         setLoading(false);
       }
@@ -33,7 +33,7 @@ const AttendanceTable = () => {
     fetchStudents();
   }, []);
 
-  const filteredStudents = students.filter(student =>
+  const filteredStudents = students.filter((student:any) =>
     student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.course?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -45,7 +45,7 @@ const AttendanceTable = () => {
     <div className="bg-white p-6 rounded shadow">
       {/* ... (keep existing JSX structure) ... */}
       <tbody>
-        {filteredStudents.map((student) => (
+        {filteredStudents.map((student:any) => (
           <tr key={student.id} className="border-t">
             <td className="p-2">{student.id}</td>
             <td className="p-2 flex items-center gap-2">

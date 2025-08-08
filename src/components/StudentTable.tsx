@@ -15,8 +15,8 @@ const StudentTable = () => {
         
         // Filter out users with isUstaz: true and transform data
         const studentData = response.data
-          .filter(user => !user.isUstaz)
-          .map(student => ({
+          .filter((user:any) => !user.isUstaz)
+          .map((student:any) => ({
             _id: student._id,
             name: student.fullName,
             courseEnrolled: 0, // Initialize with 0 courses
@@ -26,7 +26,7 @@ const StudentTable = () => {
           
         setStudents(studentData);
         setLoading(false);
-      } catch (err) {
+      } catch (err:any) {
         setError(err.response?.data?.message || err.message);
         setLoading(false);
       }
@@ -35,7 +35,7 @@ const StudentTable = () => {
     fetchStudents();
   }, []);
 
-  const filteredStudents = students.filter(student =>
+  const filteredStudents = students.filter((student:any) =>
     student.name?.toLowerCase().includes(searchTerm.toLowerCase())
     // Removed courseEnrolled from search since it's always 0 for now
   );
@@ -80,7 +80,7 @@ const StudentTable = () => {
         </thead>
         <tbody>
           {filteredStudents.length > 0 ? (
-            filteredStudents.map((student) => (
+            filteredStudents.map((student:any) => (
               <tr key={student._id} className="border-t">
                 <td className="p-2">{student._id}</td>
                 <td className="p-2 flex items-center gap-2">
@@ -111,7 +111,7 @@ const StudentTable = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="p-4 text-center">No students found</td>
+              <td colSpan={5} className="p-4 text-center">No students found</td>
             </tr>
           )}
         </tbody>
